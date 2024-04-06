@@ -1,7 +1,9 @@
 import controller.AvionController;
 import controller.PasajeroController;
+import controller.VueloController;
 import dataBase.ConfigDB;
 import entity.Pasajero;
+import entity.Vuelo;
 
 import javax.swing.*;
 
@@ -49,6 +51,15 @@ public class Main {
                             case "2":
                                 AvionController.getAll();
                                 break;
+                            case"3":
+                                AvionController.findById();
+                                break;
+                            case"4":
+                                AvionController.delete();
+                                break;
+                            case"5":
+                                AvionController.update();
+                                break;
                         }
                     } while (!option1.equals("6"));
                     break;
@@ -76,12 +87,44 @@ public class Main {
                             case"2":
                                 PasajeroController.getAll();
                                 break;
+                            case"3":
+                                PasajeroController.findById();
+                                break;
+                            case"5":
+                                PasajeroController.delete();
+                                break;
+                            case"6":
+                                PasajeroController.update();
+                                break;
+
                         }
                     }while(!option2.equals("7"));
 
                     break;
                 case"3":
                     //VUELOS
+                    String option3= "";
+                    do {
+                        option3 = JOptionPane.showInputDialog("""
+                                opciones: 
+                                1. Insertar nuevo vuelo
+                                2. Listar todos los vuelo
+                                3. Buscar por id
+                                4. Eliminar 
+                                5. Editar
+                                6. Salir
+                                                        
+                                Selecciona una opcion: 
+                                """);
+                        switch (option3) {
+                            case "1":
+                                VueloController.create();
+                                break;
+                            case"2":
+                                VueloController.getAll();
+                                break;
+                        }
+                    }while(!option3.equals("6"));
             }
         } while (!option.equals("5"));
     }

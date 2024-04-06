@@ -4,6 +4,7 @@ import entity.Avion;
 import model.AvionModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Iterator;
 
 public class AvionController {
@@ -45,5 +46,57 @@ public class AvionController {
         }
 
         return listAvion;
+    }
+
+    public static void findById() {
+        AvionModel objAvionModel = new AvionModel();
+        int id = Integer.parseInt(JOptionPane.showInputDialog("Ingresa ID a buscar: "));
+        Avion objAvion = objAvionModel.findById(id);
+
+        if (objAvion == null) {
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        } else {
+            System.out.println(objAvion.getId_avion());
+            JOptionPane.showMessageDialog(null, objAvion.toString());
+
+        }
+    }
+
+    public static void delete() {
+        AvionModel objAvionModel = new AvionModel();
+        String listAvion = getAllString();
+
+        int idDelete = Integer.parseInt(JOptionPane.showInputDialog("Ingresa ID a eliminar: "));
+        Avion objAvion = objAvionModel.findById(idDelete);
+        boolean confirm = true;
+
+        if (objAvion == null) {
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        } else {
+            int confirm2 = JOptionPane.showConfirmDialog((Component) null, "Are you sure want to delete the avion \n" + objAvion.toString());
+            if (confirm2 == 0) {
+                objAvionModel.delete(objAvion);
+            }
+        }
+    }
+
+    public static void update(){
+        AvionModel objAvionModel = new AvionModel();
+        int id= Integer.parseInt(JOptionPane.showInputDialog("Ingresa ID a editar: "));
+        String listAvion= getAllString();
+        Avion objAvion = objAvionModel.findById(id);
+
+        if(objAvion == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            String modelo = JOptionPane.showInputDialog(null, "Inserte el modelo",objAvion.getModelo());
+            String capacidad = JOptionPane.showInputDialog(null,"Inserte la capacidad",objAvion.getCapacidad());
+
+            objAvion.setModelo(modelo);
+            objAvion.setCapacidad(capacidad);
+
+            objAvionModel.update(objAvion);
+        }
+
     }
 }

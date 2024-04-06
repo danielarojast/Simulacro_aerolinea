@@ -5,6 +5,7 @@ import dataBase.ConfigDB;
 import entity.Pasajero;
 
 import javax.swing.*;
+import java.awt.*;
 import java.net.http.HttpResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,9 +24,9 @@ public class PasajeroModel implements CRUD {
             String sql= "INSERT INTO pasajero(nombre, apellido, documento_identidad) VALUE (?,?,?);";
             PreparedStatement objPrepare= objConnection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            objPrepare.setString(1, "nombre");
-            objPrepare.setString(2,"apellido");
-            objPrepare.setString(3,"documento_identidad");
+            objPrepare.setString(1, objPasajero.getNombre());
+            objPrepare.setString(2,objPasajero.getApellido());
+            objPrepare.setString(3,objPasajero.getDocumento_identidad());
 
             objPrepare.execute();
 
@@ -64,6 +65,7 @@ public class PasajeroModel implements CRUD {
                 objPasajero.setApellido((objResult.getString("apellido")));
                 objPasajero.setDocumento_identidad(objResult.getString("documento_identidad"));
 
+                System.out.println(objPasajero.getNombre());
                 listPasajero.add(objPasajero);
             }
 
@@ -76,12 +78,85 @@ public class PasajeroModel implements CRUD {
     }
 
     @Override
-    public boolean update(Object obj) {
-        return false;
+   public boolean update(Object obj) {
+        Connection objConnector= ConfigDB.openConnection();
+        Pasajero objPasajero= (Pasajero) obj;
+        boolean idUpdate= false;
+
+        try {
+            String sql= "UPDATE pasajero SET nombre = ?, apellido = ?, documento_identidad = ? WHERE id_pasajero = ?;";
+            PreparedStatement objPrepare = objConnector.prepareStatement(sql);
+
+            objPrepare.setString(1, objPasajero.getNombre());
+            objPrepare.setString(2, objPasajero.getApellido());
+            objPrepare.setString(3, objPasajero.getDocumento_identidad());
+            objPrepare.setInt(4,objPasajero.getId_pasajero() );
+
+            int allAfectedRow= objPrepare.executeUpdate();
+            if(allAfectedRow > 0){
+                idUpdate= true;
+                JOptionPane.showMessageDialog((Component) null, "the update was successful.");
+            }
+
+        }catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }finally {
+            ConfigDB.closeConnection();
+        }
+
+        return idUpdate;
     }
 
-    @Override
+     @Override
     public boolean delete(Object obj) {
-        return false;
+        Connection objConnector= ConfigDB.openConnection();
+        Pasajero objPasajero= (Pasajero) obj;
+        boolean idDelete= false;
+
+        try {
+            String sql= "DELETE FROM pasajero WHERE id_pasajero= ?;";
+            PreparedStatement objPrepare= objConnector.prepareStatement(sql);
+            objPrepare.setInt(1, objPasajero.getId_pasajero());
+
+            int totalAfectedRows= objPrepare.executeUpdate();
+            if(totalAfectedRows > 0){
+                idDelete = true;
+                JOptionPane.showMessageDialog((Component) null, "the update was successful.");
+            }
+
+        }catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }finally {
+            ConfigDB.closeConnection();
+        }
+
+        return idDelete;
+    }
+
+    public Pasajero findById(int id){
+         Connection objConnection= ConfigDB.openConnection();
+        Pasajero objPasajero= null;
+
+         try{
+             String sql= "SELECT * FROM pasajero WHERE id_pasajero = ? ;";
+             PreparedStatement objPrepare = objConnection.prepareStatement(sql);
+             objPrepare.setInt(1,id);
+             ResultSet objResult = objPrepare.executeQuery();
+
+             while(objResult.next()){
+                 objPasajero= new Pasajero();
+
+                 objPasajero.setNombre(objResult.getString("nombre"));
+                 objPasajero.setApellido(objResult.getString("apellido"));
+                 objPasajero.setDocumento_identidad(objResult.getString("documento_identidad"));
+                 objPasajero.setId_pasajero(objResult.getInt("id_pasajero"));
+
+             }
+         }catch (SQLException e){
+             JOptionPane.showMessageDialog(null, e.getMessage());
+         }finally {
+             ConfigDB.closeConnection();
+         }
+        return objPasajero;
     }
 }

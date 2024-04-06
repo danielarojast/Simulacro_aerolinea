@@ -38,16 +38,69 @@ public class PasajeroController {
         JOptionPane.showMessageDialog(null, listPasajero);
     }
 
-    public static String getAllString() {
-        PasajeroModel objModel = new PasajeroModel();
-        String listPasajero = "Lista de pasajeros:  \n";
+    public static String getAllString(){
+        PasajeroModel objPasajeroModel = new PasajeroModel();
 
-        Pasajero objPasajero;
-        for (Iterator var2 = objModel.findAll().iterator(); var2.hasNext(); listPasajero = listPasajero + objPasajero.toString() + "\n") {
-            Object iterador = var2.next();
-            objPasajero = (Pasajero) iterador;
+        String listPasajero = "Lista de Pasajero\n";
+
+        for (Object iterator : objPasajeroModel.findAll()){
+            Pasajero objPasajero = (Pasajero) iterator;
+            listPasajero += objPasajero.toString() + "\n";
         }
-
         return listPasajero;
     }
+
+    public static void findById() {
+        PasajeroModel objPasajeroModel= new PasajeroModel();
+
+        int id= Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID a buscar: ")) ;
+
+        Pasajero objPasajero= objPasajeroModel.findById(id);
+
+        if(objPasajero == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            JOptionPane.showMessageDialog(null,objPasajero.toString());
+        }
+    }
+
+    public static void delete() {
+        PasajeroModel objPasajeroModel= new PasajeroModel();
+
+        int id= Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID a eliminar: ")) ;
+        String listPasajero= getAllString();
+        Pasajero objPasajero= objPasajeroModel.findById(id);
+
+        if(objPasajero == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            int confirm2= JOptionPane.showConfirmDialog(null, "Esta seguro que lo desea eliminar? "+ objPasajero.toString()) ;
+            if(confirm2 == 0){
+                objPasajeroModel.delete(objPasajero);
+            }
+        }
+    }
+
+    public static void update() {
+        PasajeroModel objPasajeroModel= new PasajeroModel();
+        String listPasajero= getAllString();
+        int id= Integer.parseInt(JOptionPane.showInputDialog(listPasajero + "Ingrese el ID a editar: ")) ;
+
+        Pasajero objPasajero= objPasajeroModel.findById(id);
+
+        if(objPasajero == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            String nombre= JOptionPane.showInputDialog(null, "Ingrese nombre ", objPasajero.getNombre());
+            String apellido = JOptionPane.showInputDialog(null, "Ingrese apellido ", objPasajero.getApellido());
+            String documento_identidad= JOptionPane.showInputDialog(null,"Ingrese documento de identidad ", objPasajero.getDocumento_identidad());
+
+            objPasajero.setNombre(nombre);
+            objPasajero.setApellido(apellido);
+            objPasajero.setDocumento_identidad(documento_identidad);
+
+            objPasajeroModel.update(objPasajero);
+        }
+    }
+
 }
