@@ -1,7 +1,9 @@
 package controller;
 
+import entity.Pasajero;
 import entity.Vuelo;
 import model.AvionModel;
+import model.PasajeroModel;
 import model.VueloModel;
 
 import javax.swing.*;
@@ -62,5 +64,60 @@ public class VueloController {
             listVuelo += objVuelo.toString() + "\n";
         }
         return listVuelo;
+    }
+
+    public static void findById() {
+        VueloModel objVueloModel= new VueloModel();
+
+        int id= Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID a buscar: ")) ;
+
+        Vuelo objVuelo= objVueloModel.findById(id);
+
+        if(objVuelo == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            JOptionPane.showMessageDialog(null,objVuelo.toString());
+        }
+    }
+
+    public static void delete() {
+        VueloModel objVueloModel= new VueloModel();
+        String listVuelo= getAllString();
+        int id= Integer.parseInt(JOptionPane.showInputDialog(listVuelo + "Ingrese el ID a eliminar: ")) ;
+
+        Vuelo objVuelo= objVueloModel.findById(id);
+
+        if(objVuelo == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            int confirm2= JOptionPane.showConfirmDialog(null, "Esta seguro que lo desea eliminar? "+ objVuelo.toString()) ;
+            if(confirm2 == 0){
+                objVueloModel.delete(objVuelo);
+            }
+        }
+    }
+
+    public static void update() {
+        VueloModel objVueloModel= new VueloModel();
+        String listVuelo= getAllString();
+        int id= Integer.parseInt(JOptionPane.showInputDialog(listVuelo + "Ingrese el ID a editar: ")) ;
+
+        Vuelo objVuelo= objVueloModel.findById(id);
+
+        if(objVuelo == null){
+            JOptionPane.showMessageDialog(null, "No se encontro id");
+        }else{
+            String destino= JOptionPane.showInputDialog(null, "Ingrese destino ", objVuelo.getDestino());
+            String fecha_salida = JOptionPane.showInputDialog(null, "Ingrese la fecha de salida ", objVuelo.getFecha_salida());
+            String hora_salida= JOptionPane.showInputDialog(null,"Ingrese documento de identidad ", objVuelo.getHora_salida());
+            int id_avion= Integer.parseInt(JOptionPane.showInputDialog(null,"Ingrese el id del avion ", objVuelo.getId_avion()))  ;
+
+            objVuelo.setDestino(destino);
+            objVuelo.setFecha_salida(fecha_salida);
+            objVuelo.setHora_salida(hora_salida);
+            objVuelo.setId_avion(id_avion);
+
+            objVueloModel.update(objVuelo);
+        }
     }
 }

@@ -1,5 +1,6 @@
 import controller.AvionController;
 import controller.PasajeroController;
+import controller.ReservacionController;
 import controller.VueloController;
 import dataBase.ConfigDB;
 import entity.Pasajero;
@@ -90,6 +91,9 @@ public class Main {
                             case"3":
                                 PasajeroController.findById();
                                 break;
+                            case"4":
+                                PasajeroController.findByDocumento();
+                                break;
                             case"5":
                                 PasajeroController.delete();
                                 break;
@@ -123,9 +127,56 @@ public class Main {
                             case"2":
                                 VueloController.getAll();
                                 break;
+                            case"3":
+                                VueloController.findById();
+                                break;
+                            case"4":
+                                VueloController.delete();
+                                break;
+                            case"5":
+                                VueloController.update();
+                                break;
                         }
                     }while(!option3.equals("6"));
+
+                case"4":
+                    //RESERVAS
+                    String option4= "";
+                    do {
+                        option4 = JOptionPane.showInputDialog("""
+                                opciones: 
+                                1. Insertar nueva reserva
+                                2. Listar todas las reservas
+                                3. Buscar por id
+                                4. Eliminar 
+                                5. Editar
+                                6. Salir
+                                                        
+                                Selecciona una opcion: 
+                                """);
+                        switch (option4) {
+                            case "1":
+                                ReservacionController.create();
+                                break;
+                            case "2":
+                                ReservacionController.getAll();
+                                break;
+                            case "3":
+                                ReservacionController.findById();
+                                break;
+                            case "4":
+                                ReservacionController.delete();
+                                break;
+                            case "5":
+                                ReservacionController.upDate();
+                                break;
+
+                        }
+                    }while(!option4.equals("6"));
+
+                    break;
             }
+
         } while (!option.equals("5"));
     }
 }

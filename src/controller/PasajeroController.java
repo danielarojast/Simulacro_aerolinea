@@ -103,4 +103,18 @@ public class PasajeroController {
         }
     }
 
+    public static void findByDocumento() {
+        PasajeroModel objPasajeroModel= new PasajeroModel();
+
+        String documento= JOptionPane.showInputDialog("Ingrese el documento de identidad: ");
+
+        Pasajero objPasajero= objPasajeroModel.findByDocumento(documento);
+
+        if(objPasajero == null){
+            JOptionPane.showMessageDialog(null, "No se encontro pasajero con ese documento");
+        }else{
+            JOptionPane.showMessageDialog(null,objPasajero.toString());
+        }
+    }
+
 }

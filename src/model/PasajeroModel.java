@@ -159,4 +159,31 @@ public class PasajeroModel implements CRUD {
          }
         return objPasajero;
     }
+
+    public Pasajero findByDocumento(String documento){
+        Connection objConnection= ConfigDB.openConnection();
+        Pasajero objPasajero= null;
+
+        try{
+            String sql= "SELECT * FROM pasajero WHERE documento_identidad LIKE ? ;";
+            PreparedStatement objPrepare = objConnection.prepareStatement(sql);
+            objPrepare.setString(1, documento);
+            ResultSet objResult = objPrepare.executeQuery();
+
+            while(objResult.next()){
+                objPasajero= new Pasajero();
+
+                objPasajero.setNombre(objResult.getString("nombre"));
+                objPasajero.setApellido(objResult.getString("apellido"));
+                objPasajero.setDocumento_identidad(objResult.getString("documento_identidad"));
+                objPasajero.setId_pasajero(objResult.getInt("id_pasajero"));
+
+            }
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }finally {
+            ConfigDB.closeConnection();
+        }
+        return objPasajero;
+    }
 }
